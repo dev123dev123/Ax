@@ -10,6 +10,7 @@
 		69E1880E1D9C7C6A0017B6A6 /* Ax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69E188041D9C7C6A0017B6A6 /* Ax.framework */; };
 		69E188131D9C7C6A0017B6A6 /* AxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E188121D9C7C6A0017B6A6 /* AxTests.swift */; };
 		69E188151D9C7C6A0017B6A6 /* Ax.h in Headers */ = {isa = PBXBuildFile; fileRef = 69E188071D9C7C6A0017B6A6 /* Ax.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		69E1881F1D9C7DF10017B6A6 /* Ax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E1881E1D9C7DF10017B6A6 /* Ax.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 		69E1880D1D9C7C6A0017B6A6 /* AxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69E188121D9C7C6A0017B6A6 /* AxTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AxTests.swift; sourceTree = "<group>"; };
 		69E188141D9C7C6A0017B6A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		69E1881E1D9C7DF10017B6A6 /* Ax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ax.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 			children = (
 				69E188071D9C7C6A0017B6A6 /* Ax.h */,
 				69E188081D9C7C6A0017B6A6 /* Info.plist */,
+				69E1881E1D9C7DF10017B6A6 /* Ax.swift */,
 			);
 			path = Ax;
 			sourceTree = "<group>";
@@ -149,6 +152,7 @@
 					69E188031D9C7C6A0017B6A6 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = N4Z4QK8ZV2;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
 					69E1880C1D9C7C6A0017B6A6 = {
@@ -198,6 +202,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69E1881F1D9C7DF10017B6A6 /* Ax.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +327,7 @@
 		69E188191D9C7C6A0017B6A6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = N4Z4QK8ZV2;
@@ -334,6 +340,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.wilsonbalderrama.Ax;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -341,6 +348,7 @@
 		69E1881A1D9C7C6A0017B6A6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = N4Z4QK8ZV2;
@@ -360,6 +368,7 @@
 		69E1881C1D9C7C6A0017B6A6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = N4Z4QK8ZV2;
 				INFOPLIST_FILE = AxTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -372,6 +381,7 @@
 		69E1881D1D9C7C6A0017B6A6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = N4Z4QK8ZV2;
 				INFOPLIST_FILE = AxTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -400,6 +410,7 @@
 				69E1881A1D9C7C6A0017B6A6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		69E1881B1D9C7C6A0017B6A6 /* Build configuration list for PBXNativeTarget "AxTests" */ = {
 			isa = XCConfigurationList;
@@ -408,6 +419,7 @@
 				69E1881D1D9C7C6A0017B6A6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
