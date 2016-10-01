@@ -63,7 +63,7 @@ class AxTests: XCTestCase {
           done(nil)
         }
       }
-    ]) { (error) in
+    ]) { error in
       XCTAssertEqual(counter, 3)
       XCTAssertNil(error)
       ex.fulfill()
