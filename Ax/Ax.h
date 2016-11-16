@@ -14,6 +14,6 @@ FOUNDATION_EXPORT double AxVersionNumber;
 //! Project version string for Ax.
 FOUNDATION_EXPORT const unsigned char AxVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <Ax/PublicHeader.h>
+// In this header, you should import all the public headers of your framework using statements like #import <Ax/PublicHeader.h>`
 
 

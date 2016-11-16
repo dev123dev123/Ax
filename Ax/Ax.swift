@@ -8,9 +8,13 @@
 
 import Foundation
 
-class Ax {
+final class Ax {
   
-  static func parallel(tasks: [(@escaping (NSError?) -> Void) -> Void], result: @escaping (NSError?) -> Void) {
+  typealias ResultClosure = (NSError?) -> Void
+  typealias DoneClosure = (NSError?) -> Void
+  typealias TaskClosure = (@escaping DoneClosure) -> Void
+  
+  static func parallel(tasks: [TaskClosure], result: @escaping ResultClosure) {
     let group = DispatchGroup()
     var errorFound: NSError?
     
@@ -34,25 +38,63 @@ class Ax {
     }
   }
   
-  static func serial(tasks: [(@escaping (NSError?) -> Void) -> Void], result: @escaping (NSError?) -> Void) {
+  static func serial(tasks: [TaskClosure], result: @escaping ResultClosure) {
     var tasks = tasks
     
     if tasks.count > 0 {
+      
+      // getting the first task provided
       let nextTask = tasks.removeFirst()
       DispatchQueue.global(qos: .background).async {
+        
+        // running current task
         nextTask { error in
+          
+          // if error is nil, the task was run successfully then
           if error == nil {
+            // let's run another task, calling serial func recursively
             serial(tasks: tasks, result: result)
           } else  {
+            // let's stop calling more tasks
+            // and call the result closure with the error provided
+            // by some of the tasks
             result(error)
           }
         }
       }
-    }
-    else {
+      
+    } else {
+      
+      // calling the result closure
+      // with nil of the error that means
+      // that all the tasks were run successfully without any error
       DispatchQueue.global(qos: .background).async {
         result(nil)
       }
+      
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
