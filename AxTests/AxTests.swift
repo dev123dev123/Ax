@@ -11,6 +11,8 @@ import XCTest
 
 class AxTests: XCTestCase {
   
+  var errorDomain = "AxTestsDomain"
+  
   override func setUp() {
     super.setUp()
     // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -114,7 +116,7 @@ class AxTests: XCTestCase {
     
   }
   
-  func testRunningAnEmptyTask() {
+  func testRunningInSerialAnEmptyTask() {
     let ex = expectation(description: "A Empty Task is run ensuring that the Result Closure is executed and called without any error")
     
     Ax.serial(tasks: [
@@ -133,7 +135,7 @@ class AxTests: XCTestCase {
     }
   }
   
-  func testRunningOneTaskAndEmptyTaskAndOneTask() {
+  func testRunningInSerialOneTaskAndEmptyTaskAndOneTask() {
     let ex = expectation(description: "One Task, Empty Task, One Task is run ensuring that the Result Closue is executed and called without any error")
     
     Ax.serial(tasks: [
@@ -162,7 +164,7 @@ class AxTests: XCTestCase {
     }
   }
   
-  func testRunningOnlyOneTask() {
+  func testRunningInSerialOnlyOneTask() {
     let ex = expectation(description: "Running only one task and ensuring that the Result Closure is called without any error")
     
     Ax.serial(tasks: [
@@ -184,7 +186,7 @@ class AxTests: XCTestCase {
   }
   
   
-  func testRunningOnlyOneErrorTask() {
+  func testRunningInSerialOnlyOneErrorTask() {
     let ex = expectation(description: "Running only one task and ensuring that the Result Closure is called witht an error")
     
     Ax.serial(tasks: [
@@ -206,7 +208,7 @@ class AxTests: XCTestCase {
     }
   }
   
-  func testRunningOneTaskAndErrorTaskAndEmptyTask() {
+  func testRunningInSerialOneTaskAndErrorTaskAndEmptyTask() {
     let ex = expectation(description: "Running a normal task, error task, and an empty task and ensuring that the Result Closure is called with an error")
     
     Ax.serial(tasks: [
@@ -236,7 +238,7 @@ class AxTests: XCTestCase {
     }
   }
   
-  func testRunningErrorTaskAndEmptyTask() {
+  func testRunningInSerialErrorTaskAndEmptyTask() {
     let ex = expectation(description: "Running an error task, and an empty task and ensuring that the Result Closure is called with an error")
     
     Ax.serial(tasks: [
@@ -260,10 +262,6 @@ class AxTests: XCTestCase {
       }
     }
   }
-  
-  
-  
-  
   
   
   // Parallel tests
@@ -299,5 +297,278 @@ class AxTests: XCTestCase {
     }
   }
   
+  func testRunningThreeTasksInSerial() {
+    let ex = expectation(description: "three tasks are run in parallel and are verified that the three of them are running at the same time")
+    var thirdTaskWasAlreadyRun = false
+    var secondTaskWasAlreadyRun = false
+    
+    Ax.serial(tasks: [
+      { done in
+        self.runAsync(after: 4) {
+          if secondTaskWasAlreadyRun && thirdTaskWasAlreadyRun {
+            let error = NSError(domain: self.errorDomain, code: 666, userInfo: [NSLocalizedDescriptionKey: "second and third task were already run, they shouldn't since Ax should run serially, first one, second one, then third one."])
+            done(error)
+          } else {
+            done(nil)
+          }
+        }
+      },
+      { done in
+        secondTaskWasAlreadyRun = true
+        self.runAsync(after: 2) {
+          done(nil)
+        }
+      },
+      { done in
+        thirdTaskWasAlreadyRun = true
+        self.runAsync(after: 2) {
+          done(nil)
+        }
+      }
+    ]) { error in
+      XCTAssertNil(error)
+      ex.fulfill()
+    }
+    
+    waitForExpectations(timeout: 9) { (error) in
+      if let error = error {
+        XCTFail("error: \(error)")
+      }
+    }
+  }
+  
+  func testRunningThreeTasksInParallel() {
+    let ex = expectation(description: "three tasks are run in parallel and are verified that the three of them are running at the same time")
+    var counter = 0
+    var firstTaskWasAlreadyRun = false
+    var secondTaskWasAlreadyRun = false
+    
+    Ax.parallel(tasks: [
+      { done in
+        counter = 1
+        firstTaskWasAlreadyRun = true
+        self.runAsync(after: 4) {
+          done(nil)
+        }
+      },
+      { done in
+        counter = 2
+        secondTaskWasAlreadyRun = true
+        self.runAsync(after: 4) {
+          done(nil)
+        }
+      },
+      { done in
+        counter = 3
+        self.runAsync(after: 1) {
+          if firstTaskWasAlreadyRun && secondTaskWasAlreadyRun {
+            done(nil)
+          } else {
+            let error = NSError(domain: self.errorDomain, code: 666, userInfo: [NSLocalizedDescriptionKey: "first task and second task are not run in parallel!"])
+            done(error)
+          }
+        }
+      }
+    ]) { error in
+      XCTAssertNil(error)
+      XCTAssertEqual(counter, 3)
+      ex.fulfill()
+    }
+    
+    waitForExpectations(timeout: 8) { (error) in
+      if let error = error {
+        XCTFail("error: \(error)")
+      }
+    }
+  }
+  
+  
+  
+  
+  
+  func testRunningInParallelAnEmptyTask() {
+    let ex = expectation(description: "A Empty Task is run ensuring that the Result Closure is executed and called without any error")
+    
+    Ax.parallel(tasks: [
+      { done in
+        done(nil)
+      }
+    ]) { (error) in
+      XCTAssertNil(error)
+      ex.fulfill()
+    }
+    
+    waitForExpectations(timeout: 10) { (error) in
+      if let error = error {
+        XCTFail("error: \(error)")
+      }
+    }
+  }
+  
+  func testRunningInParallelOneTaskAndEmptyTaskAndOneTask() {
+    let ex = expectation(description: "One Task, Empty Task, One Task is run ensuring that the Result Closue is executed and called without any error")
+    
+    Ax.parallel(tasks: [
+      { done in
+        self.runAsync(after: 3, closure: {
+          done(nil)
+        })
+      },
+      { done in
+        done(nil)
+      },
+      { done in
+        self.runAsync(after: 2, closure: {
+          done(nil)
+        })
+      }
+    ]) { (error) in
+      XCTAssertNil(error)
+      ex.fulfill()
+    }
+    
+    waitForExpectations(timeout: 10) { (error) in
+      if let error = error {
+        XCTFail("error: \(error)")
+      }
+    }
+  }
+  
+  func testRunningInParallelOnlyOneTask() {
+    let ex = expectation(description: "Running only one task and ensuring that the Result Closure is called without any error")
+    
+    Ax.parallel(tasks: [
+      { done in
+        self.runAsync(after: 4, closure: {
+          done(nil)
+        })
+      }
+    ]) { error in
+      XCTAssertNil(error)
+      ex.fulfill()
+    }
+    
+    waitForExpectations(timeout: 10) { (error) in
+      if let error = error {
+        XCTFail("error: \(error)")
+      }
+    }
+  }
+  
+  
+  func testRunningInParallelOnlyOneErrorTask() {
+    let ex = expectation(description: "Running only one task and ensuring that the Result Closure is called witht an error")
+    
+    Ax.parallel(tasks: [
+      { done in
+        self.runAsync(after: 6) {
+          let error = NSError(domain: "Something bad happened :o", code: 666, userInfo: [NSLocalizedDescriptionKey: "there was some error"])
+          done(error)
+        }
+      }
+    ]) { error in
+      XCTAssertNotNil(error)
+      ex.fulfill()
+    }
+    
+    waitForExpectations(timeout: 10) { (error) in
+      if let error = error {
+        XCTFail("error: \(error)")
+      }
+    }
+  }
+  
+  func testRunningInParallelOneTaskAndErrorTaskAndEmptyTask() {
+    let ex = expectation(description: "Running a normal task, error task, and an empty task and ensuring that the Result Closure is called with an error")
+    
+    Ax.parallel(tasks: [
+      { done in // normal task
+        self.runAsync(after: 3) {
+          done(nil)
+        }
+      },
+      { done in // error task
+        self.runAsync(after: 2) {
+          let error = NSError(domain: "Something bad happened >)", code: 666, userInfo: [NSLocalizedDescriptionKey: "there was some error"])
+          done(error)
+        }
+      },
+      { done in // empty task
+        done(nil)
+      }
+    ]) { error in
+      XCTAssertNotNil(error)
+      ex.fulfill()
+    }
+    
+    waitForExpectations(timeout: 10) { (error) in
+      if let error = error {
+        XCTFail("error: \(error)")
+      }
+    }
+  }
+  
+  func testRunningInParallelErrorTaskAndEmptyTask() {
+    let ex = expectation(description: "Running an error task, and an empty task and ensuring that the Result Closure is called with an error")
+    
+    Ax.parallel(tasks: [
+      { done in // error task
+        self.runAsync(after: 2) {
+          let error = NSError(domain: "Something bad happened >)", code: 666, userInfo: [NSLocalizedDescriptionKey: "there was some error"])
+          done(error)
+        }
+      },
+      { done in // empty task
+        done(nil)
+      }
+    ]) { error in
+      XCTAssertNotNil(error)
+      ex.fulfill()
+    }
+    
+    waitForExpectations(timeout: 10) { (error) in
+      if let error = error {
+        XCTFail("error: \(error)")
+      }
+    }
+  }
+  
+  
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
