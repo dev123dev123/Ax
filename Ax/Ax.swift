@@ -8,13 +8,13 @@
 
 import Foundation
 
-final class Ax {
+final public class Ax {
   
-  typealias ResultClosure = (NSError?) -> Void
-  typealias DoneClosure = (NSError?) -> Void
-  typealias TaskClosure = (@escaping DoneClosure) -> Void
+  public typealias ResultClosure = (NSError?) -> Void
+  public typealias DoneClosure = (NSError?) -> Void
+  public typealias TaskClosure = (@escaping DoneClosure) -> Void
   
-  static func parallel(tasks: [TaskClosure], result: @escaping ResultClosure) {
+  public static func parallel(tasks: [TaskClosure], result: @escaping ResultClosure) {
     let group = DispatchGroup()
     var errorFound: NSError?
     
@@ -38,7 +38,7 @@ final class Ax {
     }
   }
   
-  static func serial(tasks: [TaskClosure], result: @escaping ResultClosure) {
+  public static func serial(tasks: [TaskClosure], result: @escaping ResultClosure) {
     var tasks = tasks
     
     if tasks.count > 0 {
