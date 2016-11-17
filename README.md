@@ -13,9 +13,13 @@
 ##Overview
 - [What’s It For?](https://github.com/wilsonbalderrama/Ax#whats-it-for)
   - [The Problem](https://github.com/wilsonbalderrama/Ax#the-problem)
+
 	- [The Solution](https://github.com/wilsonbalderrama/Ax#the-solution)
+
+	- [Important aspects](https://github.com/wilsonbalderrama/Ax#important-aspects-to-mention-are)
 - [Supported Functions](https://github.com/wilsonbalderrama/Ax#supported-functions)
   - [Serial](https://github.com/wilsonbalderrama/Ax#serial)
+
 	- [Parallel](https://github.com/wilsonbalderrama/Ax#parallel)
 - [Installation](https://github.com/wilsonbalderrama/Ax#installation)
 
@@ -108,11 +112,13 @@ Inspired by [async library](https://github.com/caolan/async).
 - The **closures** in `tasks` and `result` are run in `DispatchQoS.QoSClass.background` mode, it is up to you if you, for example, want to call the result in the main thread.
 
 
+
+##Supported Functions
+
 Initially the supported functions are:
 - Serial
 - Parallel
 
-##Supported Functions
 ###Serial
 This function help you to make asynchronous calls in a sequence way, running them in an orderly fashion where the first call is run and after this is finished, the next call is run and so on.
 
