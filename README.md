@@ -11,13 +11,14 @@
 **Ax** is a library written in **Swift** that helps you to control the flow of asynchronous executions in a organized way.
 Inspired by [async library](https://github.com/caolan/async).
 ##Overview
+
 - [What’s It For?](https://github.com/wilsonbalderrama/Ax#whats-it-for)
-    - [The Problem](https://github.com/wilsonbalderrama/Ax#the-problem)
-	  - [The Solution](https://github.com/wilsonbalderrama/Ax#the-solution)
-	  - [Important aspects](https://github.com/wilsonbalderrama/Ax#important-aspects-to-mention-are)
+  - [The Problem](https://github.com/wilsonbalderrama/Ax#the-problem)
+  - [The Solution](https://github.com/wilsonbalderrama/Ax#the-solution)
+  - [Important aspects](https://github.com/wilsonbalderrama/Ax#important-aspects-to-mention-are)
 - [Supported Functions](https://github.com/wilsonbalderrama/Ax#supported-functions)
-    - [Serial](https://github.com/wilsonbalderrama/Ax#serial)
-	  - [Parallel](https://github.com/wilsonbalderrama/Ax#parallel)
+  - [Serial](https://github.com/wilsonbalderrama/Ax#serial)
+  - [Parallel](https://github.com/wilsonbalderrama/Ax#parallel)
 - [Installation](https://github.com/wilsonbalderrama/Ax#installation)
 
 ##Requirements
