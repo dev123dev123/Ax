@@ -9,19 +9,21 @@
 
 
 **Ax** is a library written in **Swift** that helps you to control the flow of asynchronous executions in a organized way.
-
+Inspired by [async library](https://github.com/caolan/async).
 ##Overview
 - [What’s It For?](https://github.com/wilsonbalderrama/Ax#whats-it-for)
-  - [The Problem](https://github.com/wilsonbalderrama/Ax#the-problem)
-
-	- [The Solution](https://github.com/wilsonbalderrama/Ax#the-solution)
-
-	- [Important aspects](https://github.com/wilsonbalderrama/Ax#important-aspects-to-mention-are)
+    - [The Problem](https://github.com/wilsonbalderrama/Ax#the-problem)
+	  - [The Solution](https://github.com/wilsonbalderrama/Ax#the-solution)
+	  - [Important aspects](https://github.com/wilsonbalderrama/Ax#important-aspects-to-mention-are)
 - [Supported Functions](https://github.com/wilsonbalderrama/Ax#supported-functions)
-  - [Serial](https://github.com/wilsonbalderrama/Ax#serial)
-
-	- [Parallel](https://github.com/wilsonbalderrama/Ax#parallel)
+    - [Serial](https://github.com/wilsonbalderrama/Ax#serial)
+	  - [Parallel](https://github.com/wilsonbalderrama/Ax#parallel)
 - [Installation](https://github.com/wilsonbalderrama/Ax#installation)
+
+##Requirements
+- Xcode 8.0+
+- Swift 3.0+
+- iOS 9.0+
 
 ##What’s It For?
 
@@ -105,10 +107,8 @@ Ax.serial(
 )
 ```
 
-Inspired by [async library](https://github.com/caolan/async).
-
 ###Important aspects to mention are:
-- The variable `done` is a closure that accepts an NSError? value, when `done` is called with a `nil` that means that the task was run successfully and in other hand if `done` is called with a `NSError` value then all subsequents tasks are ignored and then immediately the `result` closure is executed with the `error` passed to the `done` variable.
+- The variable `done` is a closure that accepts an `NSError?` value, when `done` is called with a `nil` that means that the task was run successfully and in other hand if `done` is called with a `NSError` value then all subsequents tasks are ignored and then immediately the `result` closure is executed with the `error` passed to the `done` variable.
 - The **closures** in `tasks` and `result` are run in `DispatchQoS.QoSClass.background` mode, it is up to you if you, for example, want to call the result in the main thread.
 
 
