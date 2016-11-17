@@ -20,6 +20,7 @@ Inspired by [async library](https://github.com/caolan/async).
   - [Serial](https://github.com/wilsonbalderrama/Ax#serial)
   - [Parallel](https://github.com/wilsonbalderrama/Ax#parallel)
 - [Installation](https://github.com/wilsonbalderrama/Ax#installation)
+- [Usage](https://github.com/wilsonbalderrama/Ax#usage)
 
 ##Requirements
 - Xcode 8.0+
@@ -222,6 +223,12 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod "Ax"
 ```
+
+## Usage
+
+Once installed just import it in your file that you are working:
+
+`import Ax`
 
 ## Author
 
