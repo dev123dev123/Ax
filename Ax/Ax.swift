@@ -21,14 +21,16 @@ final public class Ax {
     for task in tasks {
       group.enter()
       
-      task({ (error) in
-        if let error = error {
-          errorFound = error
-          result(error)
-        }
-        
-        group.leave()
-      })
+      DispatchQueue.global(qos: .background).async {
+        task({ (error) in
+          if let error = error {
+            errorFound = error
+            result(error)
+          }
+          
+          group.leave()
+        })
+      }
     }
     
     group.notify(queue: DispatchQueue.global(qos: .background)) {
