@@ -1,0 +1,16 @@
+PODS:
+  - Ax (0.1.0)
+
+DEPENDENCIES:
+  - Ax (from `../`)
+
+EXTERNAL SOURCES:
+  Ax:
+    :path: ../
+
+SPEC CHECKSUMS:
+  Ax: fd69302f6ca2fa4df1ace5270d0dfa39d2a318f8
+
+PODFILE CHECKSUM: ff467fe009a981f8842615b07e87885d25bb678c
+
+COCOAPODS: 1.1.0.rc.2
