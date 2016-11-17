@@ -11,6 +11,13 @@
 **Ax** is a library written in **Swift** that helps you to control the flow of asynchronous executions in a organized way.
 
 ##Overview
+- [What’s It For?](https://github.com/wilsonbalderrama/Ax#whats-it-for)
+  - [The Problem](https://github.com/wilsonbalderrama/Ax#the-problem)
+	- [The Solution](https://github.com/wilsonbalderrama/Ax#the-solution)
+- [Supported Functions](https://github.com/wilsonbalderrama/Ax#supported-functions)
+  - [Serial](https://github.com/wilsonbalderrama/Ax#serial)
+	- [Parallel](https://github.com/wilsonbalderrama/Ax#parallel)
+- [Installation](https://github.com/wilsonbalderrama/Ax#installation)
 
 ##What’s It For?
 
@@ -47,7 +54,7 @@ Nesting your asynchronous calls is a common known problem in programming that th
 
 We should avoid this kind of code because it can lead to some really confusing and difficult-to-read code, it is a bad practice.
 
-### The solution
+### The Solution
 That is when it comes in play Ax, it helps you to call your async calls in a linear way giving the impression that you were running synchronous calls:
 
 ```swift
@@ -95,6 +102,11 @@ Ax.serial(
 ```
 
 Inspired by [async library](https://github.com/caolan/async).
+
+###Important aspects to mention are:
+- The variable `done` is a closure that accepts an NSError? value, when `done` is called with a `nil` that means that the task was run successfully and in other hand if `done` is called with a `NSError` value then all subsequents tasks are ignored and then immediately the `result` closure is executed with the `error` passed to the `done` variable.
+- The **closures** in `tasks` and `result` are run in `DispatchQoS.QoSClass.background` mode, it is up to you if you, for example, want to call the result in the main thread.
+
 
 Initially the supported functions are:
 - Serial
