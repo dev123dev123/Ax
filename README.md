@@ -33,7 +33,6 @@ Inspired by [async library](https://github.com/caolan/async).
 For example there could be a case when your asynchronous calls depend each other to run so a naive solution could be nesting your calls like in the example below:
 
 ```swift
-import Ax
 
 runAsync(afterSeconds: 2, completion: {
   let dataFromTask1 = 1
@@ -65,6 +64,7 @@ We should avoid this kind of code because it can lead to some really confusing a
 That is when it comes in play Ax, it helps you to call your async calls in a linear way giving the impression that you were running synchronous calls:
 
 ```swift
+import AX
 
 var dataFromTask1 = 0
 var dataFromTask2 = 0
