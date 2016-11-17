@@ -64,7 +64,7 @@ We should avoid this kind of code because it can lead to some really confusing a
 That is when it comes in play Ax, it helps you to call your async calls in a linear way giving the impression that you were running synchronous calls:
 
 ```swift
-import AX
+import Ax
 
 var dataFromTask1 = 0
 var dataFromTask2 = 0
