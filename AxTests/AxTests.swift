@@ -32,6 +32,8 @@ class AxTests: XCTestCase {
     }
   }
   
+
+  
   
   // Serial tests
   func testRunningThreeTasksAndEnsureAreBeingCalledSerially() {
@@ -525,6 +527,30 @@ class AxTests: XCTestCase {
       XCTAssertNotNil(error)
       ex.fulfill()
     }
+    
+    waitForExpectations(timeout: 10) { (error) in
+      if let error = error {
+        XCTFail("error: \(error)")
+      }
+    }
+  }
+  
+  //Each tests
+  func testRunningAnArrayItemsInParallel() {
+    let ex = expectation(description: "")
+    let array = [0, 1, 2, 3]
+    
+    Ax.each(
+      collection: array,
+      iteratee: { item, done in
+        print(item)
+        done(nil)
+      },
+      result: { error in
+        XCTAssertNil(error)
+        ex.fulfill()
+      }
+    )
     
     waitForExpectations(timeout: 10) { (error) in
       if let error = error {

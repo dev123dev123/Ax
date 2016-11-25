@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Ax'
-  s.version          = '0.1.1'
+  s.version          = '0.1.2'
   s.summary          = 'Ax is a library written in Swift that helps you to control the flow of asynchronous executions in a simplified way.'
 
 # This description is used to generate tags and improve search results.

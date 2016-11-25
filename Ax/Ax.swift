@@ -13,6 +13,33 @@ final public class Ax {
   public typealias ResultClosure = (NSError?) -> Void
   public typealias DoneClosure = (NSError?) -> Void
   public typealias TaskClosure = (@escaping DoneClosure) -> Void
+  public typealias IterateeClosure<T> = (T, DoneClosure) -> Void
+  
+  public static func each<T>(collection: [T], iteratee: @escaping IterateeClosure<T>, result: @escaping ResultClosure) {
+    let group = DispatchGroup()
+    var errorFound: NSError?
+    
+    for item in collection {
+      group.enter()
+      
+      DispatchQueue.global(qos: .background).async {
+        iteratee(item) { error in
+          if let error = error {
+            errorFound = error
+            result(error)
+          }
+          
+          group.leave()
+        }
+      }
+    }
+    
+    group.notify(queue: DispatchQueue.global()) {
+      if errorFound == nil {
+        result(nil)
+      }
+    }
+  }
   
   public static func parallel(tasks: [TaskClosure], result: @escaping ResultClosure) {
     let group = DispatchGroup()
