@@ -537,17 +537,72 @@ class AxTests: XCTestCase {
   
   //Each tests
   func testRunningAnArrayItemsInParallel() {
-    let ex = expectation(description: "")
+    let ex = expectation(description: "Running an array of items in parallel without any error.")
     let array = [0, 1, 2, 3]
     
     Ax.each(
       collection: array,
       iteratee: { item, done in
         print(item)
-        done(nil)
+        self.runAsync(after: 2, closure: {
+          done(nil)
+        })
+        
       },
       result: { error in
         XCTAssertNil(error)
+        ex.fulfill()
+      }
+    )
+    
+    waitForExpectations(timeout: 10) { (error) in
+      if let error = error {
+        XCTFail("error: \(error)")
+      }
+    }
+  }
+  
+  func testRunningAnArrayItemsEmpty() {
+    let ex = expectation(description: "Running an empty array, it should run without any error.")
+    
+    Ax.each(
+      collection: [],
+      iteratee: { item, done in
+        let error = NSError(domain: self.errorDomain, code: 666, userInfo: [ NSLocalizedDescriptionKey: "this closure shouldn't have been called."])
+        done(error)
+      },
+      result: { error in
+        XCTAssertNil(error)
+        ex.fulfill()
+      }
+    )
+    
+    waitForExpectations(timeout: 10) { (error) in
+      if let error = error {
+        XCTFail("error: \(error)")
+      }
+    }
+  }
+  
+  func testRunningAnArrayWithAnError() {
+    let ex = expectation(description: "Running an array with an error between the closures, it should throw the error and cancel other calls on closures.")
+    
+    Ax.each(
+      collection: [1, 2, 3],
+      iteratee: { item, done in
+        self.runAsync(after: 2, closure: {
+          print(item)
+          if item == 2 {
+            let error = NSError(domain: self.errorDomain, code: 666, userInfo: [ NSLocalizedDescriptionKey: "an error happened on item: \(item)"])
+            done(error)
+          } else {
+            done(nil)
+          }
+        })
+      },
+      result: { error in
+        print(error)
+        XCTAssertNotNil(error)
         ex.fulfill()
       }
     )

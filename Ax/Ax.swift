@@ -13,7 +13,7 @@ final public class Ax {
   public typealias ResultClosure = (NSError?) -> Void
   public typealias DoneClosure = (NSError?) -> Void
   public typealias TaskClosure = (@escaping DoneClosure) -> Void
-  public typealias IterateeClosure<T> = (T, DoneClosure) -> Void
+  public typealias IterateeClosure<T> = (T, @escaping DoneClosure) -> Void
   
   public static func each<T>(collection: [T], iteratee: @escaping IterateeClosure<T>, result: @escaping ResultClosure) {
     let group = DispatchGroup()
