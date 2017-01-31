@@ -32,6 +32,21 @@ class AxTests: XCTestCase {
     }
   }
   
+  func runAsync(after seconds: Int, selfCallAfter secondsAfter: Int, closure: @escaping () -> Void) {
+    let time = DispatchTime.now() + DispatchTimeInterval.seconds(seconds)
+    let timeAfter = DispatchTime.now() + DispatchTimeInterval.seconds(secondsAfter)
+    
+    let queue = DispatchQueue(label: "com.ax.runqueue")
+    
+    queue.asyncAfter(deadline: time) { 
+      closure()
+    }
+    
+    queue.asyncAfter(deadline: timeAfter) { 
+      closure()
+    }
+  }
+  
 
   
   
@@ -267,6 +282,47 @@ class AxTests: XCTestCase {
   
   
   // Parallel tests
+  func testRunningATaskThatSometimesRunsIndependentlyOfParallelFunction() {
+    
+    let ex = expectation(description: "")
+    var numCalls = 0
+    
+    Ax.parallel(tasks: [
+  
+      { done in
+      
+        self.runAsync(after: 1, selfCallAfter: 4, closure: {
+          numCalls += 1
+          
+          if numCalls == 2 {
+            ex.fulfill()
+          }
+          
+          done(nil)
+        })
+        
+      },
+      
+      { done in
+      
+        self.runAsync(after: 1, closure: {
+          done(nil)
+        })
+        
+      }
+      
+    ]) { (error) in
+      XCTAssertNil(error)
+    }
+    
+    waitForExpectations(timeout: 8) { (error) in
+      if let error = error {
+        XCTFail("error: \(error)")
+      }
+    }
+    
+  }
+  
   func testRunningThreeTasksInParallelAndEnsureResultCallIsDoneAtFinalState() {
     let ex = expectation(description: "Testing tasks that run in parallel and are finished before result closure is called")
     var counter = 0

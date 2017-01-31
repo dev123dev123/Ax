@@ -44,9 +44,11 @@ final public class Ax {
   public static func parallel(tasks: [TaskClosure], result: @escaping ResultClosure) {
     let group = DispatchGroup()
     var errorFound: NSError?
+    var numTaskEntered = 0
     
     for task in tasks {
       group.enter()
+      numTaskEntered += 1
       
       DispatchQueue.global(qos: .background).async {
         task({ (error) in
@@ -55,7 +57,10 @@ final public class Ax {
             result(error)
           }
           
-          group.leave()
+          if numTaskEntered > 0 {
+            group.leave()
+            numTaskEntered -= 1
+          }
         })
       }
     }
